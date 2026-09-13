@@ -1,0 +1,38 @@
+MIT License
+
+Copyright (c) 2026 a756598009-cmyk
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+
+THIRD-PARTY COMPONENTS NOTICE
+
+This MIT License applies only to the original code, scripts, configuration
+files, and documentation created for this project by the copyright holder,
+unless otherwise stated in the relevant file or directory.
+
+Third-party components included in or referenced by this repository, including
+but not limited to OptiScaler, third-party libraries, dynamic-link libraries,
+SDKs, models, game files, and other external components, are NOT relicensed
+under this MIT License.
+
+Such third-party components remain subject to their respective copyright
+notices, licenses, and terms of use. Users are responsible for reviewing and
+complying with the applicable license and usage requirements of each
+third-party component.
