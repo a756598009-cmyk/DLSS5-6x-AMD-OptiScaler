@@ -4,7 +4,7 @@
 
 ## 📖 项目简介
 
-**DLSS5-6x-AMD-OptiScaler** 面向 AMD GPU 用户，主要研究和实践在 AMD 硬件环境下通过 **OptiScaler** 使用 DLSS 相关功能，并整理配置、安装方法、测试结果以及兼容性信息。
+**DLSS5-6x-AMD-OptiScaler** 面向 AMD GPU 用户，主要研究和实践在 AMD 硬件环境下通过 **OptiScaler** 使用 DLSS 相关功能、安装方法、测试结果以及兼容性信息。
 
 项目重点关注：
 
@@ -16,7 +16,7 @@
 - 性能和画质对比
 - 实际使用过程中出现的问题及排查方法
 
-> **说明：** 本项目是独立的社区开源项目，与 AMD、NVIDIA、OptiScaler 或任何游戏发行商没有官方关联，也不代表任何相关厂商的立场或支持。
+> **说明：** 本项目是基于OptiScaler，独立的社区开源项目，与 AMD、NVIDIA 或任何游戏发行商没有官方关联，也不代表任何相关厂商的立场或支持。
 
 ---
 
@@ -430,11 +430,3 @@ Screenshots:
 
 感谢所有参与测试、反馈问题和提供技术支持的社区成员。
 
----
-
-## Credits
-
-- [OptiScaler](https://github.com/cdozdil/OptiScaler)
-- AMD
-- NVIDIA
-- Open-source community
