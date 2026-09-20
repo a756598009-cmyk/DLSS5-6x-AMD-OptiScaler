@@ -4,8 +4,6 @@
 链接：https://pan.quark.cn/s/a066f57d7905?pwd=qW4m
 提取码：qW4m
 
-> An open-source community project focused on experimenting with DLSS 5/6x-related technologies on AMD GPUs through OptiScaler.
-
 ## 📖 项目简介
 
 **DLSS5-6x-AMD-OptiScaler** 面向 AMD GPU 用户，主要研究和实践在 AMD 硬件环境下通过 **OptiScaler** 使用 DLSS 相关功能、安装方法、测试结果以及兼容性信息。
