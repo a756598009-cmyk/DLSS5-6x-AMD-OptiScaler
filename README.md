@@ -22,12 +22,12 @@
 
 > **说明：** 本项目是基于OptiScaler，独立的社区项目，与 AMD、NVIDIA 或任何游戏发行商没有官方关联，也不代表任何相关厂商的立场或支持。
 
-本项目基于https://github.com/optiscaler/OptiScaler项目 
+本项目基于https://github.com/optiscaler/OptiScaler  项目 
 
-基于https://github.com/Vodkaman23/DLSS-NR-UE5-Opti-DLL项目  
-基于https://github.com/MatheusGViana/dlss-5-amd-project项目  
-基于https://github.com/danielblnc/DLSS-NR-on-AMD项目  
-基于https://github.com/TheAutomatic/dlss-5-amd-project项目
+基于https://github.com/Vodkaman23/DLSS-NR-UE5-Opti-DLL  项目  
+基于https://github.com/MatheusGViana/dlss-5-amd-project  项目  
+基于https://github.com/danielblnc/DLSS-NR-on-AMD  项目  
+基于https://github.com/TheAutomatic/dlss-5-amd-project  项目
 特别鸣谢以上项目。
 > 基于以上项目开发的多帧生成兼容项目。
 ---
