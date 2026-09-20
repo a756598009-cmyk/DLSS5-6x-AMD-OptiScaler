@@ -29,7 +29,7 @@
 基于https://github.com/danielblnc/DLSS-NR-on-AMD  项目  
 基于https://github.com/TheAutomatic/dlss-5-amd-project  项目
 特别鸣谢以上项目。
-> 基于以上项目开发的多帧生成兼容项目。
+> 基于以上项目开发的多帧生成兼容项目，兼容了多种帧生成方式。
 ---
 
 ## ✨ 项目特点
