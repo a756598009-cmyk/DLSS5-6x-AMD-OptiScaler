@@ -1,4 +1,4 @@
-# DLSS5-6x-AMD-OptiScaler
+# DLSS5-30x-6x-AMD-OptiScaler
 
 夸克网盘整合包：
 链接：https://pan.quark.cn/s/a066f57d7905?pwd=qW4m
@@ -14,7 +14,7 @@ v6.1版本对齐政宗SAMA 项目v1.9.6.3 https://github.com/TheAutomatic/dlss-5
 
 ## 📖 项目简介
 
-**DLSS5-6x-AMD-OptiScaler** 面向 AMD GPU 用户，主要研究和实践在 AMD 硬件环境下通过 **OptiScaler** 使用 DLSS 相关功能、安装方法、测试结果以及兼容性信息。
+**DLSS5-30x-6x-AMD-OptiScaler** 面向 AMD GPU 用户，主要研究和实践在 AMD 硬件环境下通过 **OptiScaler** 使用 DLSS 相关功能、安装方法、测试结果以及兼容性信息。
 
 项目重点关注：
 
