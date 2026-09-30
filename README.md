@@ -329,29 +329,6 @@ Multi-Frame Generation
 
 ---
 
-### 📦 v7.1 / 上游项目对齐说明
-
-v7.1 版本对齐 **政宗SAMA 项目 v1.9.6.3** 上游版本：
-
-https://github.com/TheAutomatic/dlss-5-amd-project/releases
-
-本项目不会重复打包上游项目的全部文件，相关上游组件请自行从对应项目获取。
-
-基本流程：
-
-1. 从上游项目获取对应的 `v1.9.6.3-ZIP`。
-2. 下载本项目对应版本的文件。
-3. 将本项目需要替换/覆盖的文件复制到上游目录。
-4. 按项目提供的启动方式运行 `nm.bat`。
-5. 根据提示选择需要注入的 DLL 方式。
-6. 完成注入后，将最终文件复制到目标游戏根目录。
-7. 启动游戏并按照上面的 FG Input / FG Output 方案配置。
-8. 出现问题时优先查看 `OptiScaler.log`、游戏日志以及当前配置。
-
-> **注意：** 上游版本、OptiScaler 版本、XeFG 组件版本以及插件配置可能发生变化，实际使用时以对应 Release / 项目文档为准。
-
----
-
 ### ⚙️ OptiScaler 中的核心配置思路
 
 多帧生成方案主要围绕两个概念：
@@ -471,7 +448,7 @@ Game ───────────┤
 - [dlss-5-amd-project](https://github.com/MatheusGViana/dlss-5-amd-project) —— AMD DLSS / Neural Rendering 社区项目
 - [DLSS-NR-on-AMD](https://github.com/danielblnc/DLSS-NR-on-AMD) —— AMD Neural Rendering 相关实现与研究
 - [TheAutomatic/dlss-5-amd-project](https://github.com/TheAutomatic/dlss-5-amd-project) —— 社区持续维护版本及 AMD DLSS5 相关方案
-- 政宗SAMA 社区项目及相关测试工作
+- 政宗SAMA 社区项目
 
 特别感谢上述项目作者及社区贡献者。
 
