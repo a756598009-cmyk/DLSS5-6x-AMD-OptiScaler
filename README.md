@@ -1,3 +1,4 @@
+[**中文**](README.md) | [English](README_EN.md)
 # DLSS5-30x-6x-AMD-OptiScaler
 
 夸克网盘整合包：
