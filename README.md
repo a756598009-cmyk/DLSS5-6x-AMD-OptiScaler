@@ -407,6 +407,12 @@ DLSSG       ─┘
 **DLSS5-30x-6x-AMD-OptiScaler** 是一个面向 AMD GPU 用户的实验性技术研究与兼容性整理项目。
 
 项目核心不是单独实现某一种 Frame Generation，而是围绕 **OptiScaler + 多种 FG Input + XeFG Output + AMD GPU** 建立统一实验框架，用于研究不同游戏在 AMD 硬件环境下的超分辨率、帧生成、多帧生成以及相关神经渲染技术。
+目前主要研究
+| **1** | **OptiFG** | **XeFG 30X** | ✅ **已实现** | 不要求游戏原生 FG |
+| **2** | **FSR 3.1 FG** | **XeFG 30X** | ✅ **已实现** | 需要游戏自带 FSR 3.1 FG |
+| **3** | **FSR 3.0 FG** | **XeFG 30X** | ✅ **已实现** | 需要游戏自带 FSR 3.0 FG |
+| **4** | **DLSSG** | **XeFG 30X** | ✅ **已实现** | 需要游戏自带 DLSS FG |
+| **5** | **DLSSG** | **DLSSG 6X** | ✅ **已实现** | 需要游戏自带 DLSS FG |
 
 ### 🎯 项目核心方向
 
