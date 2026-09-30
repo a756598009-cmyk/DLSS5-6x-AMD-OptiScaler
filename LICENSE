@@ -19,20 +19,3 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
-
-
-THIRD-PARTY COMPONENTS NOTICE
-
-This MIT License applies only to the original code, scripts, configuration
-files, and documentation created for this project by the copyright holder,
-unless otherwise stated in the relevant file or directory.
-
-Third-party components included in or referenced by this repository, including
-but not limited to OptiScaler, third-party libraries, dynamic-link libraries,
-SDKs, models, game files, and other external components, are NOT relicensed
-under this MIT License.
-
-Such third-party components remain subject to their respective copyright
-notices, licenses, and terms of use. Users are responsible for reviewing and
-complying with the applicable license and usage requirements of each
-third-party component.
