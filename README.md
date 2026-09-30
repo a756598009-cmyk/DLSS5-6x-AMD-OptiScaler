@@ -6,38 +6,465 @@
 
 ## 📖 使用教程
 
-视频教程：[使用教程](https://space.bilibili.com/173069391?spm_id_from=333.1007.0.0)
+### 🔗 教程入口
 
-v7.1版本对齐政宗SAMA 项目v1.9.6.3 https://github.com/TheAutomatic/dlss-5-amd-project/releases  上游项目，文件自行在其项目中下载。对齐0.5.0。
-使用方法，去到上面这个项目把项目文件v1.9.6.3-ZIP文件下载下来，然后在把V6.1版本下载下来，将v6.1项目拷贝覆盖到v1.9.6.3-ZIP文件中覆盖，然后用nm.bat启动，点击选择文件夹，选择你要注入的Dll方式对应数字，回车键，输入3，回车，输入2，回车，输入1，回车。
-然后把全部文件拷贝到游戏根目录中即可，后面的步骤和正常的OptiScaler使用方式就差不多了。【此版本加入了xess 30倍帧生成】可以去我主页看使用教程。
+- 视频教程：[柠檬有多萌萌胧未可知 · 哔哩哔哩个人空间](https://space.bilibili.com/173069391?spm_id_from=333.1007.0.0)
+- 建议优先使用本仓库 **Releases** 中发布的版本。
+- 第三方上游组件、DLL / ASI 插件等，请按照对应项目的许可证和发布页获取。
+
+---
+
+### 🚀 多帧生成核心架构
+
+本项目将 AMD + OptiScaler 的实验方案整理为统一的 **FG Input → XeFG Output** 架构：
+
+```text
+游戏渲染帧
+    │
+    ├── FG Input（帧生成输入源）
+    │      ├─ OptiFG
+    │      ├─ FSR 3.1 FG
+    │      ├─ FSR 3.0 FG
+    │      └─ DLSSG
+    │
+    ▼
+OptiScaler
+    │
+    ▼
+XeFG
+    │
+    ▼
+多帧生成 / Multi-Frame Generation
+```
+
+### 🧩 当前整理的 4 种方案
+
+## 🚀 XeFG 30X 核心技术重构
+
+本项目对原有帧生成链路进行了重新构建，重点完成了 **XeFG 30X 多帧生成链路的重构与实现**。
+
+### 30X 帧生成链路
+
+重新构建后的 XeFG 30X 链路，以 **1/30 插入三十帧** 为核心设计目标，将单次基础帧作为输入，并扩展为连续的多帧生成输出。
+
+```text
+基础渲染帧
+    ↓
+┌──────────────────────────────┐
+│          XeFG 30X            │
+│                              │
+│  1/30 → Frame 01             │
+│  2/30 → Frame 02             │
+│  3/30 → Frame 03             │
+│  ...                         │
+│  30/30 → Frame 30            │
+└──────────────────────────────┘
+    ↓
+连续多帧输出
+```
+
+与传统的 2X / 3X / 4X 帧生成不同，**30X 的核心并不是简单提高一个固定倍数，而是重新构建多帧插入链路，使单个基础渲染帧可以对应最多 30 个生成帧位置。**
+
+### 理论 30X 输出能力
+
+> **1 个基础渲染帧 + 30 个生成帧位置 = 理论最高 30X 多帧生成倍率**
+
+在理论条件下，如果 GPU 的计算性能、显存容量、显存带宽以及整个生成链路的吞吐能力足够，便可以实现接近理论 30X 的输出能力。
+
+实际运行倍率会受到 GPU 性能、显存、Frame Time、输出分辨率、游戏负载以及 FG 输入链路等因素影响。
+
+### 30X 技术定位
+
+XeFG 30X 的重点并非单纯提高一个倍率数字，而是重新构建：
+
+```text
+FG Input
+   ↓
+Multi-Frame Generation
+   ↓
+FG Output
+```
+
+目前已经形成：
+
+```text
+OptiFG
+   ↓
+XeFG 30X
+```
+
+以及：
+
+```text
+FSR 3.0 FG ─┐
+FSR 3.1 FG ─┤
+DLSSG ──────┤
+             ↓
+         XeFG 30X
+             ↓
+        多帧生成输出
+```
+
+因此，XeFG 30X 可以作为不同 FG 输入源之后的统一多帧生成输出链路。
+
+> **注意：30X 为理论最大生成倍率，实际可达到的倍率与最终 FPS 会受到 GPU 性能、游戏负载、输入 FG 类型、分辨率以及当前运行环境等因素限制。**
+
+## 🚀 目前已经实现的 5 种 FG / MFG 路径
+
+> **以下 5 种 FG 链路目前已经在本项目中实现。**  
+> 具体可用性取决于游戏、OptiScaler 版本、FG 输入类型以及当前配置。
+
+| # | FG Input | FG Output | 当前实现状态 | 条件 |
+|---|---|---|---|---|
+| **1** | **OptiFG** | **XeFG 30X** | ✅ **已实现** | 不要求游戏原生 FG |
+| **2** | **FSR 3.1 FG** | **XeFG 30X** | ✅ **已实现** | 需要游戏自带 FSR 3.1 FG |
+| **3** | **FSR 3.0 FG** | **XeFG 30X** | ✅ **已实现** | 需要游戏自带 FSR 3.0 FG |
+| **4** | **DLSSG** | **XeFG 30X** | ✅ **已实现** | 需要游戏自带 DLSS FG |
+| **5** | **DLSSG** | **DLSSG 6X** | ✅ **已实现** | 需要游戏自带 DLSS FG |
+
+### 已实现的 FG 链路
+
+本项目当前已经实现以下 5 种帧生成（Frame Generation, FG）/ 多帧生成（Multi-Frame Generation, MFG）组合路径：
+
+```text
+① OptiFG → XeFG 30X
+② FSR 3.1 FG → XeFG 30X
+③ FSR 3.0 FG → XeFG 30X
+④ DLSSG → XeFG 30X
+⑤ DLSSG → DLSSG 6X
+```
+
+**OptiFG 输入链路：**
+
+```text
+游戏渲染
+   ↓
+OptiFG
+   ↓
+XeFG 30X
+   ↓
+多帧生成输出
+```
+
+特点：**不要求游戏原生提供 FG**。
+
+**游戏原生 FG 输入链路：**
+
+```text
+FSR 3.1 FG ─┐
+FSR 3.0 FG ─┤
+DLSSG ──────┤ → XeFG 30X
+             │
+DLSSG ──────┴ → DLSSG 6X
+```
+
+这类方案要求游戏本身提供对应的 **原生 Frame Generation**，并在游戏中启用相应 FG 功能。
+
+### ⭐ 方案 1：OptiFG + XeFG 30X
+
+**推荐使用场景：**
+
+- 游戏本身没有原生 Frame Generation；
+- 游戏的原生 FG 无法正常工作；
+- 希望通过 OptiScaler 的实验性 OptiFG 建立 FG 输入，再交给 XeFG 进行多帧生成。
+
+```text
+游戏
+ ↓
+OptiScaler / OptiFG
+ ↓
+XeFG
+ ↓
+多帧生成
+```
+
+**注意：**
+
+- OptiFG 当前主要面向 DX12。
+- OptiFG 属于实验性方案，不等同于游戏原生 FG。
+- 部分游戏可能出现 HUD 重影、UI 重复、闪烁或其他插帧伪影。
+- 如果游戏已经拥有可用的原生 FG，原则上优先使用原生 FG 输入。
+
+---
+
+### ⭐ 方案 2：FSR 3.1 FG + XeFG 30X
+
+针对**游戏原生支持 FSR 3.1 Frame Generation** 的方案。
+
+```text
+游戏原生 FSR 3.1 FG
+          ↓
+      OptiScaler
+          ↓
+        XeFG
+          ↓
+      多帧生成
+```
+
+**使用条件：**
+
+1. 游戏本身支持 FSR 3.1 Frame Generation。
+2. 进入游戏设置，开启 **FSR 3.1 FG / Frame Generation**。
+3. 启动 OptiScaler。
+4. 将 FG Input 设置为对应的 FSR FG 输入。
+5. 将 FG Output 设置为 **XeFG**。
+6. 根据 XeFG 多帧配置设置插帧倍率。
+7. 重启游戏后测试。
+
+> 游戏已经提供原生 FSR FG 输入时，优先使用原生输入，不需要再用 OptiFG 强行创建输入。
+
+---
+
+### ⭐ 方案 3：FSR 3.0 FG + XeFG 30X
+
+针对仍然使用 **FSR 3.0 Frame Generation** 的游戏。
+
+```text
+游戏原生 FSR 3.0 FG
+          ↓
+      OptiScaler
+          ↓
+        XeFG
+          ↓
+      多帧生成
+```
+
+**使用条件：**
+
+- 游戏需要自带 FSR 3.0 FG；
+- 游戏内必须开启 FSR FG；
+- OptiScaler 接入 FG 输入并配置 XeFG 输出；
+- 根据实际游戏稳定性逐步提高多帧倍率。
+
+> FSR 3.0 与 FSR 3.1 在具体游戏中的资源、时序和兼容表现可能不同，不建议假设同一套参数可以直接复制到所有游戏。
+
+---
+
+### ⭐ 方案 4：DLSSG + XeFG 30X
+
+针对**游戏原生支持 DLSS Frame Generation** 的游戏。
+
+```text
+游戏原生 DLSSG
+      ↓
+Streamline / OptiScaler FG Input
+      ↓
+     XeFG
+      ↓
+多帧生成
+```
+
+**使用条件：**
+
+1. 游戏需要支持 DLSS Frame Generation。
+2. 在游戏设置中开启 DLSS FG。
+3. 根据游戏的 Streamline / DLSSG 支持情况选择对应的 FG Input。
+4. FG Output 设置为 **XeFG**。
+5. 根据 XeFG 配置设置多帧倍率。
+6. 重启游戏后检查 `OptiScaler.log` 以及实际画面表现。
+
+> 对于已经支持原生 DLSS FG 的游戏，优先考虑 DLSSG via Streamline 等原生 FG 输入路径；OptiFG 更适合作为没有原生 FG 时的实验性方案。
+
+---
+
+### ⭐ 方案 5：DLSSG + DLSSG 6X
+
+这是针对**游戏原生支持 DLSS Frame Generation / DLSSG** 的另一条多帧生成实验路线。
+
+```text
+游戏原生 DLSSG
+      ↓
+Streamline / OptiScaler
+      ↓
+    DLSSG
+      ↓
+   DLSSG 6X
+      ↓
+多帧生成
+```
+
+**使用条件：**
+
+1. 游戏需要支持 DLSS Frame Generation。
+2. 在游戏设置中开启 DLSS FG。
+3. 确认 DLSSG / Streamline FG 输入能够正常初始化。
+4. 根据当前版本配置选择 **DLSSG 6X** 输出/多帧生成方案。
+5. 启动游戏后检查 FG 是否正常激活。
+6. 通过 FPS、Frame Time、画面稳定性以及 UI / HUD 表现确认实际效果。
+
+> **定位说明：** `DLSSG + DLSSG 6X` 与 `DLSSG + XeFG 30X` 是两条不同的实验路线。前者保持 DLSSG 作为 FG / 多帧生成链路的一部分，后者则将 DLSSG 作为输入并交由 XeFG 输出。实际可用倍率和兼容性以当前项目版本、游戏和配置为准。
+
+---
+
+### 🛠️ 推荐选择顺序
+
+为了减少兼容性问题，可以按照下面的思路选择 FG Input：
+
+```text
+① 游戏原生 DLSSG
+        ↓
+② 游戏原生 FSR 3.1 FG
+        ↓
+③ 游戏原生 FSR 3.0 FG
+        ↓
+④ OptiFG
+```
+
+然后统一进入：
+
+```text
+FG Input
+    ↓
+OptiScaler
+    ↓
+XeFG Output
+    ↓
+Multi-Frame Generation
+```
+
+**核心原则：**
+
+> 能使用游戏原生 FG 输入，就优先使用原生 FG 输入；只有在游戏没有原生 FG，或者原生 FG 不可用时，再考虑 OptiFG。
+
+---
+
+### 📦 v7.1 / 上游项目对齐说明
+
+v7.1 版本对齐 **政宗SAMA 项目 v1.9.6.3** 上游版本：
+
+https://github.com/TheAutomatic/dlss-5-amd-project/releases
+
+本项目不会重复打包上游项目的全部文件，相关上游组件请自行从对应项目获取。
+
+基本流程：
+
+1. 从上游项目获取对应的 `v1.9.6.3-ZIP`。
+2. 下载本项目对应版本的文件。
+3. 将本项目需要替换/覆盖的文件复制到上游目录。
+4. 按项目提供的启动方式运行 `nm.bat`。
+5. 根据提示选择需要注入的 DLL 方式。
+6. 完成注入后，将最终文件复制到目标游戏根目录。
+7. 启动游戏并按照上面的 FG Input / FG Output 方案配置。
+8. 出现问题时优先查看 `OptiScaler.log`、游戏日志以及当前配置。
+
+> **注意：** 上游版本、OptiScaler 版本、XeFG 组件版本以及插件配置可能发生变化，实际使用时以对应 Release / 项目文档为准。
+
+---
+
+### ⚙️ OptiScaler 中的核心配置思路
+
+多帧生成方案主要围绕两个概念：
+
+```ini
+[FrameGen]
+FGInput=...
+FGOutput=xefg
+```
+
+其中：
+
+- `FGInput`：决定**帧生成输入来自哪里**；
+- `FGOutput`：决定**最终使用哪一种 FG 输出方式**。
+
+本项目的核心实验路线：
+
+```text
+OptiFG      ─┐
+FSR 3.1 FG  ─┤
+FSR 3.0 FG  ─┼──→ OptiScaler ──→ XeFG ──→ Multi-Frame Generation
+DLSSG       ─┘
+```
+
+具体参数以当前 Release 提供的配置文件为准，不建议直接把其他游戏的完整 `OptiScaler.ini` 原样复制。
+
+---
+
+### 🔄 修改配置后的标准流程
+
+```text
+修改 OptiScaler.ini
+        ↓
+保存配置
+        ↓
+完全退出游戏
+        ↓
+重新启动游戏
+        ↓
+确认 FG Input
+        ↓
+确认 FG Output = XeFG
+        ↓
+确认 FG Active
+        ↓
+观察 FPS / Frame Time / 画面伪影
+```
+
+如果出现闪烁、拖影、重影、UI 抖动、HUD 重复、黑屏或崩溃，建议先恢复最近一次可用配置，再逐项修改参数。
 
 ## 📖 项目简介
 
-**DLSS5-30x-6x-AMD-OptiScaler** 面向 AMD GPU 用户，主要研究和实践在 AMD 硬件环境下通过 **OptiScaler** 使用 DLSS 相关功能、安装方法、测试结果以及兼容性信息。
+**DLSS5-30x-6x-AMD-OptiScaler** 是一个面向 AMD GPU 用户的实验性技术研究与兼容性整理项目。
 
-项目重点关注：
+项目核心不是单独实现某一种 Frame Generation，而是围绕 **OptiScaler + 多种 FG Input + XeFG Output + AMD GPU** 建立统一实验框架，用于研究不同游戏在 AMD 硬件环境下的超分辨率、帧生成、多帧生成以及相关神经渲染技术。
 
-- AMD GPU + OptiScaler 的实际运行效果
-- DLSS 5/6x 相关实验性配置
-- Frame Generation 测试
-- 游戏兼容性测试
-- 参数调试与配置整理
-- 性能和画质对比
-- 实际使用过程中出现的问题及排查方法
+### 🎯 项目核心方向
 
-> **说明：** 本项目是基于OptiScaler，独立的社区项目，与 AMD、NVIDIA 或任何游戏发行商没有官方关联，也不代表任何相关厂商的立场或支持。
+- AMD GPU + OptiScaler 实际运行与兼容性测试
+- DLSS / DLSSG 输入路径研究
+- FSR 3.0 / 3.1 Frame Generation 输入路径研究
+- OptiFG 实验性 Frame Generation 输入
+- XeFG 多帧生成输出方案
+- DLSS 5 / Neural Rendering 相关实验
+- 游戏兼容性、稳定性与画质测试
+- Frame Time、FPS、1% Low、GPU / VRAM 等性能数据记录
+- 不同 FG Input / Output 组合的兼容性分析
 
-本项目基于https://github.com/optiscaler/OptiScaler  项目 
+### 🧠 技术架构
 
-基于https://github.com/Vodkaman23/DLSS-NR-UE5-Opti-DLL  项目  
-基于https://github.com/MatheusGViana/dlss-5-amd-project  项目  
-基于https://github.com/danielblnc/DLSS-NR-on-AMD  项目  
-基于https://github.com/TheAutomatic/dlss-5-amd-project 国内UP@政宗SAMA 项目,他的主页https://space.bilibili.com/291088/dynamic
+本项目采用“**输入源与输出端解耦**”的思路：
 
-特别鸣谢以上项目。
-> 基于以上项目开发的多帧生成兼容项目，兼容了多种帧生成方式。
----
+```text
+                ┌─ OptiFG
+                ├─ FSR 3.1 FG
+                ├─ FSR 3.0 FG
+Game ───────────┤
+                └─ DLSSG
+                      │
+                      ▼
+                  OptiScaler
+                      │
+                      ▼
+                    XeFG
+                      │
+                      ▼
+             Multi-Frame Generation
+```
+
+其中：
+
+- **FG Input**：负责向 OptiScaler 提供帧生成所需输入；
+- **OptiScaler**：负责兼容层、资源转换以及 FG 路径管理；
+- **XeFG**：作为实验方案中的 Frame Generation / Multi-Frame Generation 输出端；
+- **MFG**：通过 XeFG 相关配置进行更高倍率的插帧实验。
+
+这种架构允许同一套研究框架覆盖不同游戏的原生 FG 路径，同时保留 OptiFG 作为无原生 FG 游戏的实验性补充。
+
+### 🔗 项目基础与上游来源
+
+本项目基于并参考以下开源项目及社区工作：
+
+- [OptiScaler](https://github.com/optiscaler/OptiScaler) —— 核心兼容层与 Upscaling / Frame Generation 框架
+- [DLSS-NR-UE5-Opti-DLL](https://github.com/Vodkaman23/DLSS-NR-UE5-Opti-DLL) —— DLSS Neural Rendering / AMD 相关实验基础
+- [dlss-5-amd-project](https://github.com/MatheusGViana/dlss-5-amd-project) —— AMD DLSS / Neural Rendering 社区项目
+- [DLSS-NR-on-AMD](https://github.com/danielblnc/DLSS-NR-on-AMD) —— AMD Neural Rendering 相关实现与研究
+- [TheAutomatic/dlss-5-amd-project](https://github.com/TheAutomatic/dlss-5-amd-project) —— 社区持续维护版本及 AMD DLSS5 相关方案
+- 政宗SAMA 社区项目及相关测试工作
+
+特别感谢上述项目作者及社区贡献者。
+
+> **说明：** 本项目是在上述开源项目、公开资料和社区研究基础上的独立实验与整理项目。不同项目之间的代码、DLL、模型、插件和许可证保持其各自归属。本仓库不会将第三方项目的版权或许可证视为本项目所有。
+
+> **重要：** 本项目中的“XeFG 30X / 6X”等倍率描述属于当前实验配置、插件能力或测试结果的整理方式，不应理解为 Intel XeFG 或 OptiScaler 官方默认支持的固定倍率。
 
 ## ✨ 项目特点
 
@@ -87,6 +514,20 @@ DLSS5-6x-AMD-OptiScaler/
 
 ---
 
+## 🧩 FG 方案速查
+
+| FG Input | XeFG Output | 是否需要游戏原生 FG | 推荐使用场景 |
+|---|---|---|---|
+| **OptiFG** | **XeFG 30X** | ❌ 不需要 | 无原生 FG / 原生 FG 不可用的实验场景 |
+| **FSR 3.1 FG** | **XeFG 30X** | ✅ 需要 | 游戏自带 FSR 3.1 FG |
+| **FSR 3.0 FG** | **XeFG 30X** | ✅ 需要 | 游戏自带 FSR 3.0 FG |
+| **DLSSG** | **XeFG 30X** | ✅ 需要 | 游戏自带 DLSS Frame Generation |
+| **DLSSG** | **DLSSG 6X** | ✅ 需要 | 游戏自带 DLSS Frame Generation，使用 DLSSG 6X 实验路线 |
+
+> **选择原则：** 原生 FG 输入通常优先于 OptiFG；OptiFG 主要用于没有原生 FG 或原生 FG 无法工作的情况。
+
+---
+
 ## 🖥️ 测试环境
 
 项目以实际硬件和游戏环境测试为基础。
@@ -105,22 +546,66 @@ DLSS5-6x-AMD-OptiScaler/
 
 ---
 
-## 📦 安装
+## 📦 安装与部署
 
-请优先使用 GitHub **Releases** 中发布的版本。
+### 1. 获取项目文件
 
-基本流程：
+建议优先使用本仓库 **GitHub Releases** 发布的版本。
 
-1. 下载对应版本的 Release 安装包。
-2. 解压到合适的位置。
-3. 根据项目说明完成安装或部署。
-4. 根据游戏和硬件环境修改相关配置。
-5. 启动游戏并观察实际效果。
-6. 如果出现问题，请记录 GPU、驱动、游戏版本、OptiScaler 配置和日志后提交 Issue。
+```text
+Release
+  ↓
+下载对应版本
+  ↓
+解压
+  ↓
+阅读当前版本说明
+  ↓
+根据目标游戏选择 FG Input
+```
 
-> 建议在修改配置前备份原始游戏文件和配置文件。
+### 2. 安装到游戏目录
 
----
+基础部署流程：
+
+1. 关闭游戏。
+2. 备份原始游戏文件。
+3. 将当前 Release 所需文件复制到游戏根目录。
+4. 确认 `OptiScaler.ini` 与对应 DLL / 插件目录位置正确。
+5. 根据游戏类型选择 FG Input。
+6. 将 FG Output 设置为 XeFG（如果当前版本/配置支持该路径）。
+7. 启动游戏。
+8. 在 OptiScaler Overlay 中检查 Frame Generation 状态。
+9. 修改参数后完全退出并重新启动游戏。
+
+### 3. 第一次运行建议
+
+不要第一次就直接追求最高倍率：
+
+```text
+确认游戏正常启动
+        ↓
+确认 OptiScaler 正常加载
+        ↓
+确认 FG Input 正常工作
+        ↓
+确认 XeFG Output 正常工作
+        ↓
+低倍率测试
+        ↓
+确认画面 / Frame Time / 稳定性
+        ↓
+再逐步提高多帧倍率
+```
+
+### 4. 安全与兼容性建议
+
+- 修改配置前备份原文件。
+- 每次只修改少量参数。
+- 不要直接复制其他游戏的完整配置。
+- 遇到崩溃时先恢复最近一次可用配置。
+- 记录 GPU、驱动、Windows、游戏版本、OptiScaler 版本。
+- 联机游戏使用前，应确认相关 Mod / DLL / 注入方式是否违反游戏规则或触发反作弊。
 
 ## ⚙️ 配置说明
 
