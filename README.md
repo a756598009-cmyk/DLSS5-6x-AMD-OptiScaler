@@ -8,9 +8,10 @@
 ## 📖 使用教程
 
 ### 🔗 教程入口
-
+v10.0 双上游方案
 - 视频教程：[柠檬有多萌萌胧未可知 · 哔哩哔哩个人空间](https://space.bilibili.com/173069391?spm_id_from=333.1007.0.0)
-v9.6版本对齐政宗SAMA 项目v1.10.0 https://github.com/TheAutomatic/dlss-5-amd-project/releases 上游项目，文件自行在其项目中下载。使用方法，去到上面这个项目把项目文件v1.10.0-ZIP文件下载下来，然后在把v9.6版本下载下来，将v9.6项目拷贝覆盖到v1.10.0文件中覆盖，然后用nm.bat启动，点击选择文件夹，选择你要注入的Dll方式对应数字，回车键，输入1，回车，输入2，回车，输入2，回车,输入1，回车。 然后把全部文件拷贝到游戏根目录中，在运行开关30倍帧生成，按提示输入对应数字选择你要开启的多帧生成方式，后面的步骤和正常的OptiScaler使用方式就差不多了。【此版本加入了4种 xess 30倍帧生成】可以去我主页看使用教程。
+v10.0版本对齐政宗SAMA 项目v1.10.0 https://github.com/TheAutomatic/dlss-5-amd-project/releases 上游项目，文件自行在其项目中下载。使用方法，去到上面这个项目把项目文件v1.10.0-ZIP文件下载下来，然后在把v10.0版本下载下来，将v10.0项目拷贝覆盖到v1.10.0文件中覆盖，然后用nm.bat启动，点击选择文件夹，选择你要注入的Dll方式对应数字，回车键，输入1，回车，输入2，回车，输入2，回车,输入1，回车。 然后把全部文件拷贝到游戏根目录中，在运行开关30倍帧生成，按提示输入对应数字选择你要开启的多帧生成方式，后面的步骤和正常的OptiScaler使用方式就差不多了。【此版本加入了4种 xess 30倍帧生成】可以去我主页看使用教程。
+如果要更换上游就先运行“开关30倍帧生成_四种模式+更换上游.exe”，选择6回车，然后用nm.bat启动，点击选择文件夹，选择你要注入的Dll方式对应数字，回车键，输入1，回车，输入2，回车，输入2，回车,输入1，回车。 然后把全部文件拷贝到游戏根目录中，在运行开关30倍帧生成，按提示输入对应数字选择你要开启的多帧生成方式，后面的步骤和正常的OptiScaler使用方式就差不多了。【此版本加入了4种 xess 30倍帧生成】可以去我主页看使用教程。
 RX 6000（RDNA2）：
 增加了对RX 6000系列（RDNA2）显卡的支持
 RDNA2显卡需要安装AMD HIP 7.2运行时才能正常工作，可以从AMD官网下载（https://www.amd.com/en/developer/resources/rocm-hub/hip-sdk.html)
@@ -450,6 +451,7 @@ Game ───────────┤
 - [DLSS-NR-on-AMD](https://github.com/danielblnc/DLSS-NR-on-AMD) —— AMD Neural Rendering 相关实现与研究
 - [TheAutomatic/dlss-5-amd-project](https://github.com/TheAutomatic/dlss-5-amd-project) —— 社区持续维护版本及 AMD DLSS5 相关方案
 - 政宗SAMA 社区项目
+- [neural-amd-opti](https://github.com/MatheusFerreiraS/neural-amd-opti) —— OptiScaler持续维护版本及 AMD DLSS5 相关方案
 
 特别感谢上述项目作者及社区贡献者。
 
