@@ -10,7 +10,6 @@
 ### 🔗 教程入口
 v11.3双上游方案
 - 视频教程：[柠檬有多萌萌胧未可知 · 哔哩哔哩个人空间](https://space.bilibili.com/173069391?spm_id_from=333.1007.0.0)
-v11.3版本对齐政宗SAMA 项目v1.11.0 https://github.com/TheAutomatic/dlss-5-amd-project/releases 上游项目，文件自行在其项目中下载。
 
 使用教程1蓝色版本：
 此方法适合使用伪装后使用FSR+30倍帧生成+DLSS5效果最佳
