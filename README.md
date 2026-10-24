@@ -28,6 +28,7 @@
 
 支持9000系，7000系，6000系，不同游戏自行测试，使用方法与之前一致。
 【此版本加入了4种 xess 30倍帧生成】可以去我主页看使用教程。RX 6000（RDNA2）： 增加了对RX 6000系列（RDNA2）显卡的支持 RDNA2显卡需要安装AMD HIP 7.2运行时才能正常工作，可以从AMD官网下载（https://www.amd.com/en/developer/resources/rocm-hub/hip-sdk.html)
+加入了FSR4.1.2,FSR4.1.3
 ---
 
 ### 🚀 多帧生成核心架构
