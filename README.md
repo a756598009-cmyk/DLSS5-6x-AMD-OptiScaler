@@ -1,6 +1,8 @@
 [**中文**](README.md) | [English](README_EN.md)
 # DLSS5-30x-6x-AMD-OptiScaler
 
+红色中文版改成紫色，中文版在这个项目中下载：https://github.com/a756598009-cmyk/AMD-DLSS5-NR-30X-OptiScaler
+
 夸克网盘整合包：
 链接：https://pan.quark.cn/s/a066f57d7905?pwd=qW4m
 提取码：qW4m
